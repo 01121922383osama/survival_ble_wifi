@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "120076704728",
+    "project_id": "testradar-dcd05",
+    "storage_bucket": "testradar-dcd05.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120076704728:android:8472f460b37a1b64eb30ad",
+        "android_client_info": {
+          "package_name": "com.azizalbarik.company.survival"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8J-5mfBMyiT6Jh2mK4aN6uRj0127lgB8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120076704728:android:adf2d966d26a91e9eb30ad",
+        "android_client_info": {
+          "package_name": "com.azizalbarik.company.survival.survival"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8J-5mfBMyiT6Jh2mK4aN6uRj0127lgB8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
