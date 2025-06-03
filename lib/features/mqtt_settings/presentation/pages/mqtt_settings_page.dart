@@ -358,6 +358,7 @@ class _MqttSettingsPageState extends State<MqttSettingsPage>
 
       // Simulate connection test
       Future.delayed(const Duration(seconds: 2), () {
+        if (!context.mounted) return;
         Navigator.pop(context); // Close the progress dialog
 
         // Show result dialog (success for demo)

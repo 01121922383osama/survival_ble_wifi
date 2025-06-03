@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage>
                             width: 120,
                             height: 120,
                             decoration: BoxDecoration(
-                              color: Colors.grey.shade300.withOpacity(0.3),
+                              color: Colors.grey.shade300.withValues(alpha: .3),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage>
                             vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: .2),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
@@ -119,7 +119,7 @@ class _LoginPageState extends State<LoginPage>
                         Container(
                           padding: const EdgeInsets.all(24),
                           decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: .2),
                             borderRadius: BorderRadius.circular(24),
                           ),
                           child: Form(
@@ -151,7 +151,9 @@ class _LoginPageState extends State<LoginPage>
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                       borderSide: BorderSide(
-                                        color: Colors.white.withOpacity(0.3),
+                                        color: Colors.white.withValues(
+                                          alpha: .3,
+                                        ),
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
@@ -168,7 +170,9 @@ class _LoginPageState extends State<LoginPage>
                                       ),
                                     ),
                                     filled: true,
-                                    fillColor: Colors.white.withOpacity(0.1),
+                                    fillColor: Colors.white.withValues(
+                                      alpha: .1,
+                                    ),
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -212,7 +216,9 @@ class _LoginPageState extends State<LoginPage>
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                       borderSide: BorderSide(
-                                        color: Colors.white.withOpacity(0.3),
+                                        color: Colors.white.withValues(
+                                          alpha: .3,
+                                        ),
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
@@ -229,7 +235,9 @@ class _LoginPageState extends State<LoginPage>
                                       ),
                                     ),
                                     filled: true,
-                                    fillColor: Colors.white.withOpacity(0.1),
+                                    fillColor: Colors.white.withValues(
+                                      alpha: .1,
+                                    ),
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -255,7 +263,9 @@ class _LoginPageState extends State<LoginPage>
                                             child: Checkbox(
                                               value: false,
                                               onChanged: (value) {
-                                                // TODO: Implement remember me functionality
+                                                setState(() {
+                                                  value = value!;
+                                                });
                                               },
                                               fillColor:
                                                   WidgetStateProperty.all(
@@ -274,9 +284,7 @@ class _LoginPageState extends State<LoginPage>
                                         ],
                                       ),
                                       TextButton(
-                                        onPressed: () {
-                                          // TODO: Implement forgot password functionality
-                                        },
+                                        onPressed: () {},
                                         child: const Text(
                                           'Forgot Password?',
                                           style: TextStyle(color: Colors.white),
@@ -306,11 +314,12 @@ class _LoginPageState extends State<LoginPage>
                                       );
                                     }
                                     if (state is Authenticated) {
-                                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                                        if (mounted) {
-                                          context.go(RouteName.home);
-                                        }
-                                      });
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                            if (mounted) {
+                                              context.go(RouteName.home);
+                                            }
+                                          });
                                     }
                                     return GradientButton(
                                       onPressed: state is AuthLoading

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart'; // Import intl package
+import 'package:survival/core/router/route_name.dart';
 import 'package:survival/core/theme/theme.dart';
 import 'package:survival/features/sensor_connectivity/domain/entities/sensor_entities.dart';
 import 'package:survival/features/sensor_connectivity/presentation/cubit/sensor_cubit.dart';
@@ -104,11 +105,7 @@ class DeviceCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 16.0),
       child: GestureDetector(
         onTap: () {
-          // Navigate to device details page using GoRouter
-          context.push(
-            '/device_settings',
-            extra: sensor, // Pass the sensor object
-          );
+          context.push(RouteName.deviceSettings, extra: sensor);
         },
         child: Container(
           decoration: BoxDecoration(

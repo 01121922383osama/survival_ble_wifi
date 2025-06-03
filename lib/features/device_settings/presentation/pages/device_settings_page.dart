@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:survival/core/di/service_locator.dart' as di; // Import DI
@@ -75,16 +77,14 @@ class _DeviceSettingsPageState extends State<DeviceSettingsPage> {
           IconButton(
             icon: const Icon(Icons.settings, color: Colors.white),
             onPressed: () {
-              // TODO: Implement navigation to general settings or remove
-              print('Settings icon pressed');
+              log('Settings icon pressed');
             },
           ),
           // Example action - maybe navigate to device details?
           IconButton(
             icon: const Icon(Icons.arrow_forward, color: Colors.white),
             onPressed: () {
-              // TODO: Implement navigation to further details or remove
-              print('Forward icon pressed');
+              log('Forward icon pressed');
             },
           ),
         ],
@@ -332,11 +332,11 @@ class _DeviceSettingsPageState extends State<DeviceSettingsPage> {
                   activeTrackColor: Theme.of(context).colorScheme.primary,
                   inactiveTrackColor: Theme.of(
                     context,
-                  ).colorScheme.primary.withOpacity(0.3),
+                  ).colorScheme.primary.withValues(alpha: 0.3),
                   thumbColor: Theme.of(context).colorScheme.primary,
                   overlayColor: Theme.of(
                     context,
-                  ).colorScheme.primary.withOpacity(0.2),
+                  ).colorScheme.primary.withValues(alpha: 0.2),
                   trackHeight: 6.0,
                   thumbShape: const RoundSliderThumbShape(
                     enabledThumbRadius: 10.0,
@@ -409,10 +409,8 @@ class _DeviceSettingsPageState extends State<DeviceSettingsPage> {
           Expanded(
             child: ElevatedButton.icon(
               onPressed: () {
-                // TODO: Implement 'Reset Alert' functionality if different from reset defaults
-                // For now, triggering the reset defaults dialog
                 _showResetConfirmationDialog(context);
-                print('Reset Alert button pressed');
+                log('Reset Alert button pressed');
               },
               icon: const Icon(Icons.refresh, color: Colors.white),
               label: const Text(

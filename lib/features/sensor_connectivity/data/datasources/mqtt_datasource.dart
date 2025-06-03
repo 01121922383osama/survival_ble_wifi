@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
@@ -30,7 +31,7 @@ class MqttDatasourceImpl implements MqttDatasource {
     String? username,
     String? password,
   ) async {
-    print('MQTT Datasource: Connecting to $server:$port as $clientIdentifier');
+    log('MQTT Datasource: Connecting to $server:$port as $clientIdentifier');
 
     try {
       _client = MqttServerClient.withPort(server, clientIdentifier, port);
@@ -53,14 +54,14 @@ class MqttDatasourceImpl implements MqttDatasource {
       await _client!.connect();
       return _client!.connectionStatus!.state == MqttConnectionState.connected;
     } catch (e) {
-      print('MQTT Datasource: Connection failed - $e');
+      log('MQTT Datasource: Connection failed - $e');
       return false;
     }
   }
 
   @override
   void disconnect() {
-    print('MQTT Datasource: Disconnecting');
+    log('MQTT Datasource: Disconnecting');
     _client?.disconnect();
 
     // Close all topic controllers
@@ -105,7 +106,7 @@ class MqttDatasourceImpl implements MqttDatasource {
 
   @override
   void publish(String topic, String message) {
-    print('MQTT Datasource: Publishing to $topic: $message');
+    log('MQTT Datasource: Publishing to $topic: $message');
     if (_client?.connectionStatus?.state == MqttConnectionState.connected) {
       final builder = MqttClientPayloadBuilder();
       builder.addString(message);
@@ -118,7 +119,7 @@ class MqttDatasourceImpl implements MqttDatasource {
 
   // Callbacks
   void _onConnected() {
-    print('MQTT Datasource: Connected');
+    log('MQTT Datasource: Connected');
 
     // Resubscribe to all topics
     for (var topic in _topicControllers.keys) {
@@ -127,10 +128,10 @@ class MqttDatasourceImpl implements MqttDatasource {
   }
 
   void _onDisconnected() {
-    print('MQTT Datasource: Disconnected');
+    log('MQTT Datasource: Disconnected');
   }
 
   void _onSubscribed(String topic) {
-    print('MQTT Datasource: Subscribed to $topic');
+    log('MQTT Datasource: Subscribed to $topic');
   }
 }

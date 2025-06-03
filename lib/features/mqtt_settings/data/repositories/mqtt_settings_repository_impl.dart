@@ -6,6 +6,7 @@ import 'package:survival/core/error/failures.dart';
 import 'package:survival/features/mqtt_settings/domain/repositories/mqtt_settings_repository.dart';
 
 // Define keys for SharedPreferences
+// ignore: constant_identifier_names
 const String CACHED_MQTT_SETTINGS = 'CACHED_MQTT_SETTINGS';
 
 class MqttSettingsRepositoryImpl implements MqttSettingsRepository {

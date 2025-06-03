@@ -26,6 +26,7 @@ abstract class BleDatasource {
     Guid characteristicUuid,
     bool enable,
   );
+
   Future<void> writeBleCharacteristic(
     BluetoothDevice device,
     Guid serviceUuid,
@@ -168,18 +169,22 @@ class BleDatasourceImpl implements BleDatasource {
     List<int> value, {
     bool withoutResponse = false,
   }) async {
-    log('BLE Datasource: Writing to characteristic $characteristicUuid in service $serviceUuid');
-    log('Value to write (hex): ${value.map((b) => b.toRadixString(16).padLeft(2, '0')).join(':')}');
-    
+    log(
+      'BLE Datasource: Writing to characteristic $characteristicUuid in service $serviceUuid',
+    );
+    log(
+      'Value to write (hex): ${value.map((b) => b.toRadixString(16).padLeft(2, '0')).join(':')}',
+    );
+
     try {
       // Log connection state
       log('Device connection state: ${device.connectionState}');
-      
+
       // Discover services
       log('Discovering services...');
       List<BluetoothService> services = await device.discoverServices();
       log('Discovered ${services.length} service(s) on device');
-      
+
       // Log all services and their characteristics for debugging
       for (var service in services) {
         log('Service: ${service.uuid}');
@@ -196,26 +201,36 @@ class BleDatasourceImpl implements BleDatasource {
       for (var service in services) {
         if (service.uuid == serviceUuid) {
           log('Found target service: ${service.uuid}');
-          
+
           for (var characteristic in service.characteristics) {
-            log('  Checking characteristic: ${characteristic.uuid} (props: ${characteristic.properties})');
-            
+            log(
+              '  Checking characteristic: ${characteristic.uuid} (props: ${characteristic.properties})',
+            );
+
             if (characteristic.uuid == characteristicUuid) {
               log('  Found target characteristic. Writing value...');
-              
+
               // Check if characteristic is writable
               if (withoutResponse) {
                 if (!characteristic.properties.writeWithoutResponse) {
-                  log('  Error: Characteristic does not support writeWithoutResponse');
-                  throw Exception('Characteristic does not support writeWithoutResponse');
+                  log(
+                    '  Error: Characteristic does not support writeWithoutResponse',
+                  );
+                  throw Exception(
+                    'Characteristic does not support writeWithoutResponse',
+                  );
                 }
               } else {
                 if (!characteristic.properties.write) {
-                  log('  Error: Characteristic does not support write with response');
-                  throw Exception('Characteristic does not support write with response');
+                  log(
+                    '  Error: Characteristic does not support write with response',
+                  );
+                  throw Exception(
+                    'Characteristic does not support write with response',
+                  );
                 }
               }
-              
+
               // Write to characteristic
               await characteristic.write(
                 value,
@@ -225,11 +240,15 @@ class BleDatasourceImpl implements BleDatasource {
               return;
             }
           }
-          log('  Error: Characteristic $characteristicUuid not found in service');
+          log(
+            '  Error: Characteristic $characteristicUuid not found in service',
+          );
         }
       }
-      
-      log('Error: Service $serviceUuid or characteristic $characteristicUuid not found');
+
+      log(
+        'Error: Service $serviceUuid or characteristic $characteristicUuid not found',
+      );
       throw Exception('Service or characteristic not found');
     } catch (e) {
       log('BLE Datasource: Error writing to characteristic: $e');

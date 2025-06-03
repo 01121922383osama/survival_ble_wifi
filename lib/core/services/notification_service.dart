@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -318,9 +321,17 @@ class NotificationService {
 
   // --- Helper Methods ---
   Future<String?> getFcmTokenAndroidAndIos() async {
-    String? token = await _firebaseMessaging.getToken();
-    if (kDebugMode) {
-      print("Firebase Messaging Token: $token");
+    String? token;
+    if (Platform.isAndroid) {
+      token = await _firebaseMessaging.getToken();
+      if (kDebugMode) {
+        log("FCM Token: $token");
+      }
+    } else if (Platform.isIOS) {
+      token = await _firebaseMessaging.getAPNSToken();
+      if (kDebugMode) {
+        log("APNS Token: $token");
+      }
     }
     return token;
   }

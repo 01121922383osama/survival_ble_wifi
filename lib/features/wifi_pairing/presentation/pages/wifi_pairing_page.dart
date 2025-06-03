@@ -708,9 +708,11 @@ class _WifiPairingPageState extends State<WifiPairingPage> {
         _startPairing();
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error: No device connected')),
-      );
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          const SnackBar(content: Text('Error: No device connected')),
+        );
     }
   }
 

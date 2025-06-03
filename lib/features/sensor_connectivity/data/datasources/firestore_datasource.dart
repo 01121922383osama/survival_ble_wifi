@@ -22,8 +22,10 @@ class FirestoreDatasource {
         .collection('devices')
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs.map((doc) => SensorDevice.fromFirestore(doc)).toList();
-    });
+          return snapshot.docs
+              .map((doc) => SensorDevice.fromFirestore(doc))
+              .toList();
+        });
   }
 
   // Stream logs for a specific device
@@ -42,8 +44,10 @@ class FirestoreDatasource {
         .limit(50) // Limit logs for performance
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs.map((doc) => DeviceLog.fromFirestore(doc)).toList();
-    });
+          return snapshot.docs
+              .map((doc) => DeviceLog.fromFirestore(doc))
+              .toList();
+        });
   }
 
   // Add a new device (example)
@@ -61,8 +65,11 @@ class FirestoreDatasource {
   }
 
   // Update device data (example for status)
-  Future<void> updateDeviceStatus(String deviceId, Map<String, dynamic> statusData) async {
-     final userId = _userId;
+  Future<void> updateDeviceStatus(
+    String deviceId,
+    Map<String, dynamic> statusData,
+  ) async {
+    final userId = _userId;
     if (userId == null) {
       throw Exception('User not logged in');
     }
@@ -89,8 +96,11 @@ class FirestoreDatasource {
         .add(log.toFirestore());
   }
 
-   // Update device settings
-  Future<void> updateDeviceSettings(String deviceId, Map<String, dynamic> settings) async {
+  // Update device settings
+  Future<void> updateDeviceSettings(
+    String deviceId,
+    Map<String, dynamic> settings,
+  ) async {
     final userId = _userId;
     if (userId == null) {
       throw Exception('User not logged in');
@@ -118,4 +128,3 @@ class FirestoreDatasource {
     return doc.data();
   }
 }
-

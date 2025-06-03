@@ -86,7 +86,9 @@ class _SignupPageState extends State<SignupPage>
                             width: 100,
                             height: 100,
                             decoration: BoxDecoration(
-                              color: Colors.grey.shade300.withOpacity(0.3),
+                              color: Colors.grey.shade300.withValues(
+                                alpha: 0.3,
+                              ),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
@@ -112,7 +114,7 @@ class _SignupPageState extends State<SignupPage>
                             vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
@@ -127,7 +129,7 @@ class _SignupPageState extends State<SignupPage>
                         Container(
                           padding: const EdgeInsets.all(24),
                           decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(24),
                           ),
                           child: Form(
@@ -159,7 +161,9 @@ class _SignupPageState extends State<SignupPage>
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                       borderSide: BorderSide(
-                                        color: Colors.white.withOpacity(0.3),
+                                        color: Colors.white.withValues(
+                                          alpha: 0.3,
+                                        ),
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
@@ -176,7 +180,9 @@ class _SignupPageState extends State<SignupPage>
                                       ),
                                     ),
                                     filled: true,
-                                    fillColor: Colors.white.withOpacity(0.1),
+                                    fillColor: Colors.white.withValues(
+                                      alpha: 0.1,
+                                    ),
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -202,7 +208,9 @@ class _SignupPageState extends State<SignupPage>
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                       borderSide: BorderSide(
-                                        color: Colors.white.withOpacity(0.3),
+                                        color: Colors.white.withValues(
+                                          alpha: 0.3,
+                                        ),
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
@@ -219,7 +227,9 @@ class _SignupPageState extends State<SignupPage>
                                       ),
                                     ),
                                     filled: true,
-                                    fillColor: Colors.white.withOpacity(0.1),
+                                    fillColor: Colors.white.withValues(
+                                      alpha: 0.1,
+                                    ),
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -263,7 +273,9 @@ class _SignupPageState extends State<SignupPage>
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                       borderSide: BorderSide(
-                                        color: Colors.white.withOpacity(0.3),
+                                        color: Colors.white.withValues(
+                                          alpha: 0.3,
+                                        ),
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
@@ -280,7 +292,9 @@ class _SignupPageState extends State<SignupPage>
                                       ),
                                     ),
                                     filled: true,
-                                    fillColor: Colors.white.withOpacity(0.1),
+                                    fillColor: Colors.white.withValues(
+                                      alpha: 0.1,
+                                    ),
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -324,7 +338,9 @@ class _SignupPageState extends State<SignupPage>
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                       borderSide: BorderSide(
-                                        color: Colors.white.withOpacity(0.3),
+                                        color: Colors.white.withValues(
+                                          alpha: 0.3,
+                                        ),
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
@@ -341,7 +357,9 @@ class _SignupPageState extends State<SignupPage>
                                       ),
                                     ),
                                     filled: true,
-                                    fillColor: Colors.white.withOpacity(0.1),
+                                    fillColor: Colors.white.withValues(
+                                      alpha: 0.1,
+                                    ),
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {

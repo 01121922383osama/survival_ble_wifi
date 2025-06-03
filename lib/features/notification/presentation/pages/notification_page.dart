@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:survival/core/theme/theme.dart'; // Import theme
 
-// TODO: Implement actual notification data fetching and display
-// TODO: Connect TabBar to actual filtering logic
-
 class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
 
@@ -11,7 +8,8 @@ class NotificationPage extends StatefulWidget {
   State<NotificationPage> createState() => _NotificationPageState();
 }
 
-class _NotificationPageState extends State<NotificationPage> with SingleTickerProviderStateMixin {
+class _NotificationPageState extends State<NotificationPage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   // Example notification data structure
@@ -38,8 +36,12 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
   @override
   Widget build(BuildContext context) {
     // Filter notifications based on tab (Example logic)
-    List<Map<String, dynamic>> unreadNotifications = _allNotifications.where((n) => !n['read']).toList();
-    List<Map<String, dynamic>> resolvedNotifications = _allNotifications.where((n) => n['resolved']).toList();
+    List<Map<String, dynamic>> unreadNotifications = _allNotifications
+        .where((n) => !n['read'])
+        .toList();
+    List<Map<String, dynamic>> resolvedNotifications = _allNotifications
+        .where((n) => n['resolved'])
+        .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -49,16 +51,14 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
           IconButton(
             icon: const Icon(Icons.delete_sweep_outlined),
             tooltip: 'Clear Resolved',
-            onPressed: () {
-              // TODO: Implement clear resolved notifications logic
-            },
+            onPressed: () {},
           ),
         ],
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: lightTextColor, // Use theme color
           labelColor: lightTextColor,
-          unselectedLabelColor: lightTextColor.withOpacity(0.7),
+          unselectedLabelColor: lightTextColor.withValues(alpha: 0.7),
           tabs: const [
             Tab(text: 'All'),
             Tab(text: 'Unread'), // Or 'Active'
@@ -77,7 +77,10 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
     );
   }
 
-  Widget _buildNotificationList(List<Map<String, dynamic>> notifications, String tabName) {
+  Widget _buildNotificationList(
+    List<Map<String, dynamic>> notifications,
+    String tabName,
+  ) {
     if (notifications.isEmpty) {
       return Center(
         child: Column(
@@ -91,42 +94,54 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
             const SizedBox(height: 16),
             Text(
               'No ${tabName.toLowerCase()} notifications',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.grey.shade600),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(color: Colors.grey.shade600),
             ),
           ],
         ),
       );
     }
 
-    // TODO: Replace with actual notification list items
     return ListView.builder(
       itemCount: notifications.length,
       itemBuilder: (context, index) {
         final notification = notifications[index];
         return ListTile(
           leading: Icon(
-            _getNotificationIcon(notification['title']), 
+            _getNotificationIcon(notification['title']),
             color: notification['read'] ? Colors.grey : primaryColor,
           ),
-          title: Text(notification['title'], style: TextStyle(fontWeight: notification['read'] ? FontWeight.normal : FontWeight.bold)),
+          title: Text(
+            notification['title'],
+            style: TextStyle(
+              fontWeight: notification['read']
+                  ? FontWeight.normal
+                  : FontWeight.bold,
+            ),
+          ),
           subtitle: Text(notification['body']),
           trailing: Text(
             _formatTimestamp(notification['timestamp']),
             style: Theme.of(context).textTheme.bodySmall,
           ),
-          onTap: () {
-            // TODO: Mark as read and navigate to detail or handle action
-          },
+          onTap: () {},
         );
       },
     );
   }
 
   IconData _getNotificationIcon(String title) {
-    if (title.toLowerCase().contains('fall')) return Icons.warning_amber_rounded;
-    if (title.toLowerCase().contains('offline')) return Icons.signal_wifi_off_outlined;
-    if (title.toLowerCase().contains('battery')) return Icons.battery_alert_outlined;
-    return Icons.notifications; // Default
+    if (title.toLowerCase().contains('fall')) {
+      return Icons.warning_amber_rounded;
+    }
+    if (title.toLowerCase().contains('offline')) {
+      return Icons.signal_wifi_off_outlined;
+    }
+    if (title.toLowerCase().contains('battery')) {
+      return Icons.battery_alert_outlined;
+    }
+    return Icons.notifications;
   }
 
   String _formatTimestamp(DateTime timestamp) {
@@ -144,4 +159,3 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
     }
   }
 }
-

@@ -14,6 +14,7 @@ import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:survival/core/di/service_locator.dart' as di;
 import 'package:survival/core/router/router.dart';
+import 'package:survival/core/services/notification_service.dart';
 import 'package:survival/core/theme/theme.dart';
 import 'package:survival/core/theme/theme_cubit.dart';
 import 'package:survival/features/auth/presentation/cubit/auth_cubit.dart';
@@ -83,6 +84,11 @@ Future<void> main() async {
 
   try {
     await _initializeFirebase();
+
+    NotificationService().initialize();
+
+    final token = await NotificationService().getFcmTokenAndroidAndIos();
+    log.info("FCM Token: $token");
 
     await _setupLogging();
 

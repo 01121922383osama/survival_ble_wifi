@@ -100,7 +100,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   String _mapFailureToMessage(Failure failure) {
     switch (failure.runtimeType) {
-      case ServerFailure:
+      case const (ServerFailure):
         return (failure as ServerFailure).message;
       // Add other failure types if needed
       default:

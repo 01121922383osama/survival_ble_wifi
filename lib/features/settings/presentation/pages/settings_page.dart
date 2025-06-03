@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:survival/core/di/service_locator.dart' as di;
+import 'package:survival/core/router/route_name.dart';
 import 'package:survival/core/services/notification_service.dart';
 import 'package:survival/core/theme/theme.dart';
 import 'package:survival/core/theme/theme_cubit.dart';
@@ -42,17 +43,13 @@ class SettingsPage extends StatelessWidget {
                   context,
                   icon: Icons.person_outline,
                   title: 'الملف الشخصي', // Profile
-                  onTap: () {
-                    // TODO: Navigate to Profile Page
-                  },
+                  onTap: () {},
                 ),
                 _buildListTile(
                   context,
                   icon: Icons.lock_outline,
                   title: 'تغيير كلمة المرور', // Change Password
-                  onTap: () {
-                    // TODO: Navigate to Change Password Page
-                  },
+                  onTap: () {},
                 ),
               ],
             ),
@@ -73,7 +70,7 @@ class SettingsPage extends StatelessWidget {
                   icon: Icons.notifications_outlined,
                   title: 'إعدادات الإشعارات', // Notification Settings
                   onTap: () {
-                    // TODO: Navigate to Notification Settings Page
+                    context.push('/notification_settings');
                   },
                 ),
                 _buildListTile(
@@ -83,6 +80,7 @@ class SettingsPage extends StatelessWidget {
                   onTap: () async {
                     // Trigger test notification
                     await di.sl<NotificationService>().showTestNotification();
+                    if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text(
@@ -101,9 +99,7 @@ class SettingsPage extends StatelessWidget {
                     'العربية',
                     style: TextStyle(color: Colors.grey.shade600),
                   ), // Arabic
-                  onTap: () {
-                    // TODO: Implement Language Selection
-                  },
+                  onTap: () {},
                 ),
                 _buildListTile(
                   context,
@@ -127,25 +123,19 @@ class SettingsPage extends StatelessWidget {
                   context,
                   icon: Icons.info_outline,
                   title: 'حول التطبيق', // About App
-                  onTap: () {
-                    // TODO: Show About Dialog/Page
-                  },
+                  onTap: () {},
                 ),
                 _buildListTile(
                   context,
                   icon: Icons.privacy_tip_outlined,
                   title: 'سياسة الخصوصية', // Privacy Policy
-                  onTap: () {
-                    // TODO: Navigate to Privacy Policy
-                  },
+                  onTap: () {},
                 ),
                 _buildListTile(
                   context,
                   icon: Icons.description_outlined,
                   title: 'شروط الخدمة', // Terms of Service
-                  onTap: () {
-                    // TODO: Navigate to Terms of Service
-                  },
+                  onTap: () {},
                 ),
               ],
             ),
@@ -155,7 +145,7 @@ class SettingsPage extends StatelessWidget {
               child: GradientButton(
                 onPressed: () {
                   context.read<AuthCubit>().logoutUser();
-                  // GoRouter redirect will handle navigation to login
+                  context.go(RouteName.login);
                 },
                 gradient: errorGradient,
                 width: MediaQuery.of(context).size.width * 0.6,

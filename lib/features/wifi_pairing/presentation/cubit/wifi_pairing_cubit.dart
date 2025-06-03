@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as developer;
+import 'dart:developer';
 import 'dart:io' show Platform;
 
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -558,8 +559,7 @@ class WifiPairingCubit extends Cubit<WifiPairingState> {
     _passwordToPair = password;
     emit(const WifiPairingLoading(message: 'Starting pairing...'));
 
-    // TODO: Ensure device is actually connected via BLE first.
-    // This might involve calling sensorRepository.connectBleDevice if needed.
+    await sensorRepository.connectBleDevice(device);
 
     final subscribed = await _subscribeToPairingNotifications(device);
     if (!subscribed) return;
@@ -595,7 +595,7 @@ class WifiPairingCubit extends Cubit<WifiPairingState> {
     // Placeholder: Assume subscription setup is successful
     // In a real scenario, this would involve interacting with the repository/datasource
     // to get the notification stream.
-    print("Attempting to listen to notifications (simulation)...");
+    log("Attempting to listen to notifications (simulation)...");
     // Simulate listening - replace with actual stream subscription
     // Example: _bleNotificationSubscription = sensorRepository.getNotificationStream(device, serviceUuid, charUuid).listen(...);
     _setupSimulatedNotificationListener(
@@ -628,11 +628,10 @@ class WifiPairingCubit extends Cubit<WifiPairingState> {
         if (!isClosed) emit(WifiPairingFailure('Error setting up BLE listener: $e'));
      }
      */
-    print(
+    log(
       "Simulated listener setup complete. Waiting for simulated notifications...",
     );
-    // TODO: Remove this simulation once real BLE handling is in place.
-    // Simulate receiving responses after commands are sent (for testing flow)
+    log("Simulating responses...");
     _simulateResponses();
   }
 
@@ -678,38 +677,38 @@ class WifiPairingCubit extends Cubit<WifiPairingState> {
 
     if (dataMap.containsKey(wifiPairingReadCharUuid)) {
       List<int> data = dataMap[wifiPairingReadCharUuid]!;
-      print("Handling Pairing Notification: $data");
+      log("Handling Pairing Notification: $data");
 
       if (data.length >= 4 && data[0] == 0xAA && data[1] == 0x55) {
         int cmd = data[2];
-        // TODO: Verify CRC
+        log("Pairing Step: Received Command $cmd");
 
         switch (cmd) {
           case 0x05: // ACK: Pairing request received
-            print("Pairing Step: Device ACK Request. Sending SSID...");
+            log("Pairing Step: Device ACK Request. Sending SSID...");
             _sendSsid();
             break;
           case 0x06: // ACK: SSID received
-            print("Pairing Step: Device ACK SSID. Sending Password...");
+            log("Pairing Step: Device ACK SSID. Sending Password...");
             _sendPassword();
             break;
           case 0x07: // ACK: Password received, device connecting...
-            print("Pairing Step: Device ACK Password. Connecting to Wi-Fi...");
+            log("Pairing Step: Device ACK Password. Connecting to Wi-Fi...");
             emit(const WifiPairingDeviceConnecting());
             break;
           case 0x08: // SUCCESS: Router connection successful
-            print(
+            log(
               "Pairing Step: Router connection successful! Adding device to Firestore...",
             );
             // --- Add device to Firestore ---
             _addDeviceToFirestore(_targetDevice!);
             // Emit success state AFTER attempting to add to Firestore
-            // emit(const WifiPairingSuccess()); // Moved to _addDeviceToFirestore result handling
+            emit(const WifiPairingSuccess());
             _cleanup();
             break;
           case 0x09: // FAIL: Timeout
           case 0xA0: // FAIL: Wrong credentials
-            print("Pairing Step: Router connection failed (CMD: $cmd).");
+            log("Pairing Step: Router connection failed (CMD: $cmd).");
             emit(
               WifiPairingFailure(
                 'Device failed to connect to Wi-Fi (Code: $cmd)',
@@ -718,7 +717,7 @@ class WifiPairingCubit extends Cubit<WifiPairingState> {
             _cleanup();
             break;
           case 0x01: // FAIL: CRC error
-            print("Pairing Step: Device reported CRC error.");
+            log("Pairing Step: Device reported CRC error.");
             emit(
               const WifiPairingFailure(
                 'Device reported a communication error (CRC).',
@@ -727,10 +726,10 @@ class WifiPairingCubit extends Cubit<WifiPairingState> {
             _cleanup();
             break;
           default:
-            print("Pairing Step: Received unknown command $cmd");
+            log("Pairing Step: Received unknown command $cmd");
         }
       } else {
-        print("Pairing Step: Received invalid data format: $data");
+        log("Pairing Step: Received invalid data format: $data");
       }
     }
   }
@@ -738,7 +737,7 @@ class WifiPairingCubit extends Cubit<WifiPairingState> {
   // --- New method to add device to Firestore ---
   Future<void> _addDeviceToFirestore(BluetoothDevice bleDevice) async {
     if (isClosed) return;
-    print("Attempting to add device ${bleDevice.remoteId} to Firestore...");
+    log("Attempting to add device ${bleDevice.remoteId} to Firestore...");
     final deviceToAdd = SensorDevice(
       id: bleDevice.remoteId
           .toString(), // Use BLE remote ID as Firestore document ID
@@ -759,7 +758,7 @@ class WifiPairingCubit extends Cubit<WifiPairingState> {
 
     result.fold(
       (failure) {
-        print("Error adding device to Firestore: ${failure.toString()}");
+        log("Error adding device to Firestore: ${failure.toString()}");
         // Emit failure state, indicating pairing worked but saving failed
         emit(
           WifiPairingFailure(
@@ -768,7 +767,7 @@ class WifiPairingCubit extends Cubit<WifiPairingState> {
         );
       },
       (_) {
-        print("Device ${bleDevice.remoteId} successfully added to Firestore.");
+        log("Device ${bleDevice.remoteId} successfully added to Firestore.");
         // Emit final success state for the pairing process
         emit(const WifiPairingSuccess());
         // SensorCubit listening to Firestore stream will automatically pick up the new device.
@@ -781,7 +780,7 @@ class WifiPairingCubit extends Cubit<WifiPairingState> {
     List<int> command,
   ) async {
     if (isClosed) return;
-    print("Sending BLE command: $command");
+    log("Sending BLE command: $command");
     final result = await sensorRepository.writeBleCharacteristic(
       device,
       wifiPairingServiceUuid,
@@ -801,7 +800,7 @@ class WifiPairingCubit extends Cubit<WifiPairingState> {
         }
       },
       (_) {
-        print("Sent BLE command successfully.");
+        log("Sent BLE command successfully.");
       },
     );
   }
@@ -837,10 +836,10 @@ class WifiPairingCubit extends Cubit<WifiPairingState> {
             false,
           )
           .then((_) {
-            print("Unsubscribed from pairing notifications.");
+            log("Unsubscribed from pairing notifications.");
           })
           .catchError((e) {
-            print("Error unsubscribing from pairing notifications: $e");
+            log("Error unsubscribing from pairing notifications: $e");
           });
     }
     // Reset target device after cleanup
@@ -848,7 +847,7 @@ class WifiPairingCubit extends Cubit<WifiPairingState> {
   }
 
   void cancelPairing() {
-    print("Pairing cancelled by user.");
+    log("Pairing cancelled by user.");
     _cleanup();
     if (!isClosed) emit(WifiPairingInitial());
   }

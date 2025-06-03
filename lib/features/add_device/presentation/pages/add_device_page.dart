@@ -200,14 +200,16 @@ Advertisement Data: ${result.advertisementData.toString()}
     final completer = Completer<void>();
 
     // Show loading dialog
-    showDialog<void>(
-      context: navigatorContext,
-      barrierDismissible: false,
-      builder: (BuildContext context) => const PopScope(
-        canPop: false,
-        child: Center(child: CircularProgressIndicator()),
-      ),
-    ).then((_) => completer.complete());
+    if (navigatorContext.mounted) {
+      showDialog<void>(
+        context: navigatorContext,
+        barrierDismissible: false,
+        builder: (BuildContext context) => const PopScope(
+          canPop: false,
+          child: Center(child: CircularProgressIndicator()),
+        ),
+      ).then((_) => completer.complete());
+    }
 
     try {
       // Connect to the device
@@ -218,7 +220,9 @@ Advertisement Data: ${result.advertisementData.toString()}
       if (!mounted) return;
 
       // Dismiss the dialog
-      Navigator.of(navigatorContext, rootNavigator: true).pop();
+      if (navigatorContext.mounted) {
+        Navigator.of(navigatorContext, rootNavigator: true).pop();
+      }
       await completer.future; // Wait for dialog to be dismissed
 
       log('Navigating to WiFi pairing page');

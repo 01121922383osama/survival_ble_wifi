@@ -86,8 +86,8 @@ void _registerAuthFeature() {
 
   // Repository
   sl.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(sl()),
-  ); // Inject FirebaseAuth
+    () => AuthRepositoryImpl(sl<FirebaseAuth>(), sl<FirebaseFirestore>()),
+  ); // Inject FirebaseAuth and Firestore
 
   // Data sources (if separated)
 }

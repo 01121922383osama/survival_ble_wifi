@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.azizalbarik.company.survival">
+    package="com.azizalbarik.company.survival.survival">
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
